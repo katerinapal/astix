@@ -1,5 +1,5 @@
 define(['game/drawer', 'game/conf', 'game/block'], function(drawer, conf, block) {
-    var drawBoard;
+    var drawBoard, displayScoreBoard;
 
     drawBoard = function() {
         var i, j, posX, posY;
@@ -13,7 +13,20 @@ define(['game/drawer', 'game/conf', 'game/block'], function(drawer, conf, block)
         }
     };
 
+    displayScoreBoard = function(score) {
+        if (typeof score === "undefined") {
+            score = 0;
+        }
+
+        drawer.ctx.fillStyle = 'rgb(0, 0, 0)';
+        drawer.ctx.font = "20px Arial";
+
+        drawer.ctx.clearRect(0, drawer.canvasHeight - 30, drawer.canvasWidth, 30)
+        drawer.ctx.fillText('Score: ' + score, 10, drawer.canvasHeight - 5);
+    }
+
     return {
-        draw: drawBoard
+        draw: drawBoard,
+        displayScore: displayScoreBoard
     };
 })
