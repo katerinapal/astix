@@ -30,7 +30,7 @@ require(['domReady!', 'game/drawer', 'game/board', 'game/paddle', 'game/ball',
         };
 
         endGame = function() {
-            //clearInterval(gameLoop);
+            clearInterval(gameLoop);
             drawer.ctx.fillText('The End!', drawer.canvasWidth / 2, drawer.canvasHeight / 2);
         };
 
@@ -38,7 +38,7 @@ require(['domReady!', 'game/drawer', 'game/board', 'game/paddle', 'game/ball',
             drawer.clearArea();
             board.draw();
             board.displayScore();
-            ball.move(endGame);
+            ball.move([paddle], endGame);
             ball.draw();
             paddle.move(paddleMove);
             paddle.draw();

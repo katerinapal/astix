@@ -6,7 +6,9 @@ define(['game/drawer', 'game/block', 'game/conf', 'game/constants'],
             posX = defaultPosX,
             posY = defaultPosY,
             defaultPaddleSpeedX = 10,
-            deltaPaddleX = 0;
+            deltaPaddleX = 0,
+            getX, getY,
+            getWidth, getHeight;
 
         drawPaddle = function() {
             block.draw(posX, posY, conf.paddleWidth, conf.paddleHeight);
@@ -23,8 +25,6 @@ define(['game/drawer', 'game/block', 'game/conf', 'game/constants'],
                 deltaPaddleX = defaultPaddleSpeedX;
             }
 
-            console.log(posX);
-
             if (posX + deltaPaddleX < 0 ||
                 posX + conf.paddleWidth + deltaPaddleX > drawer.canvasWidth)
             {
@@ -34,8 +34,28 @@ define(['game/drawer', 'game/block', 'game/conf', 'game/constants'],
             posX += deltaPaddleX;
         };
 
+        getX = function() {
+            return posX;
+        };
+
+        getY = function() {
+            return posY;
+        };
+
+        getWidth = function() {
+            return conf.paddleWidth;
+        };
+
+        getHeight = function() {
+            return conf.paddleHeight;
+        };
+
         return {
             draw: drawPaddle,
-            move: movePaddle
+            move: movePaddle,
+            getX: getX,
+            getY: getY,
+            getWidth: getWidth,
+            getHeight: getHeight,
         };
     })
