@@ -1,4 +1,4 @@
-define(['game/drawer'], function(drawer) {
+define(['drawer'], function(drawer) {
     var drawBlock,
         defaultFillColor = '#000',
         defaultStrokeColor = '#FFF';

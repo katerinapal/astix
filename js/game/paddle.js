@@ -1,4 +1,4 @@
-define(['game/drawer', 'game/block', 'game/conf', 'game/constants'],
+define(['drawer', 'block', 'conf', 'constants'],
     function(drawer, block, conf, constants) {
         var drawPaddle, movePaddle,
             defaultPosX = (drawer.canvasWidth / 2) - (conf.paddleWidth / 2),

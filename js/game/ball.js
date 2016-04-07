@@ -1,8 +1,8 @@
-define(['game/drawer', 'game/conf'], function(drawer, conf) {
+define(['drawer', 'conf'], function(drawer, conf) {
     var drawBall, defaultStrokeColor = '#000', moveBall,
         posX = 250, posY = 250, deltaX = 10, deltaY = 10,
         ballRadius = 10, computeBallCollision,
-        getX, getY;
+        getX, getY, getDeltaX, getDeltaY, setDeltaX, setDeltaY;
 
     drawBall = function() {
         drawer.ctx.beginPath();
@@ -59,10 +59,30 @@ define(['game/drawer', 'game/conf'], function(drawer, conf) {
         return posY;
     };
 
+    getDeltaX = function() {
+        return deltaX;
+    };
+
+    getDeltaY = function() {
+        return deltaY;
+    };
+
+    setDeltaX = function(newDeltaX) {
+        deltaX = newDeltaX;
+    };
+
+    setDeltaY = function(newDeltaY) {
+        deltaY = newDeltaY;
+    };
+
     return {
         draw: drawBall,
         move: moveBall,
         getX: getX,
         getY: getY,
+        getDeltaX: getDeltaX,
+        getDeltaY: getDeltaY,
+        setDeltaX: setDeltaX,
+        setDeltaY: setDeltaY,
     };
 })
