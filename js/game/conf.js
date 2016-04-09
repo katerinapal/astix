@@ -22,5 +22,15 @@ define(['drawer'], function(drawer) {
             "STROKE_COLOR": "#FFF",
             "FILL_COLOR": "#000",
         },
+        "BOARD": {
+            "BLOCK": {
+                "STROKE_COLOR": "#FFF",
+                "FILL_COLOR": "#000",
+            },
+        },
+        "PADDLE": {
+            "STROKE_COLOR": "#000",
+            "FILL_COLOR": "#000",
+        },
     };
 });

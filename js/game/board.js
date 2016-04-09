@@ -15,8 +15,16 @@ define(['drawer', 'conf', 'block', 'constants'],
             }
         }
 
-        drawBoard = function() {
+        drawBoard = function(newFillColor, newStrokeColor) {
             var i, j, posX, posY;
+
+            if (typeof newFillColor !== "undefined") {
+                block.setFillColor(newFillColor);
+            }
+
+            if (typeof newStrokeColor !== "undefined") {
+                block.setStrokeColor(newStrokeColor);
+            }
 
             for (i = 0; i < rows; i++) {
                 for (j = 0; j < columns; j++) {

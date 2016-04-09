@@ -39,7 +39,10 @@ require(['domReady!', 'drawer', 'board', 'paddle', 'ball',
         animate = function() {
             gameStatus = constants.GAME.STATUS.PLAYING;
             drawer.clearArea();
-            board.draw();
+            board.draw(
+                conf.BOARD.BLOCK.FILL_COLOR,
+                conf.BOARD.BLOCK.STROKE_COLOR
+            );
             board.displayScore(score);
             ball.move([paddle]);
             ball.draw();
@@ -47,7 +50,7 @@ require(['domReady!', 'drawer', 'board', 'paddle', 'ball',
             board.collision([ball], function() {
                 score += 2;
             });
-            paddle.draw();
+            paddle.draw(conf.PADDLE.FILL_COLOR, conf.PADDLE.STROKE_COLOR);
 
             if (board.isEmpty() || ball.isDestroyed()) {
                 gameStatus = constants.GAME.STATUS.END;
