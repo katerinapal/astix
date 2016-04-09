@@ -11,6 +11,7 @@ define(['drawer', 'block', 'conf', 'constants'],
             getWidth, getHeight;
 
         drawPaddle = function() {
+            block.setStrokeColor("#000");
             block.draw(posX, posY, conf.paddleWidth, conf.paddleHeight);
         };
 

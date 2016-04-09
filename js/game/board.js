@@ -1,13 +1,16 @@
 define(['drawer', 'conf', 'block', 'constants'],
     function(drawer, conf, block, constants) {
-        var drawBoard, displayScoreBoard, collision, explodeBlock,
+        var rows = conf.blocksPerRow,
+            columns = Math.floor(conf.startBlocksQuantity / conf.blocksPerRow),
+            drawBoard, displayScoreBoard, collision, explodeBlock,
             boardData = Array(conf.blocksPerRow),
-            collisionBlockLeftRight, collisionBlockTopBottom;
+            collisionBlockLeftRight, collisionBlockTopBottom, isEmpty,
+            filledFields = rows * columns;
 
-        for (var i = 0; i < boardData.length; i++) {
-            boardData[i] = Array(Math.floor(conf.startBlocksQuantity / conf.blocksPerRow));
+        for (var i = 0; i < rows; i++) {
+            boardData[i] = Array(columns);
 
-            for (var j = 0; j < boardData[i].length; j++) {
+            for (var j = 0; j < columns; j++) {
                 boardData[i][j] = constants.BLOCK.VISIBLE;
             }
         }
@@ -15,8 +18,8 @@ define(['drawer', 'conf', 'block', 'constants'],
         drawBoard = function() {
             var i, j, posX, posY;
 
-            for (i = 0; i < boardData.length; i++) {
-                for (j = 0; j < boardData[i].length; j++) {
+            for (i = 0; i < rows; i++) {
+                for (j = 0; j < columns; j++) {
                     if (boardData[i][j] === constants.BLOCK.VISIBLE) {
                         posX = i * conf.blockWidth;
                         posY = j * conf.blockHeight;
@@ -31,8 +34,8 @@ define(['drawer', 'conf', 'block', 'constants'],
             var i, j, blockPosX, blockPosY;
 
             elements.forEach(function(element, index) {
-                for (i=0; i < boardData.length; i++) {
-                    for (j = 0; j < boardData[i].length; j++) {
+                for (i=0; i < rows; i++) {
+                    for (j = 0; j < columns; j++) {
                         if (boardData[i][j] === constants.BLOCK.VISIBLE) {
                             if (collisionBlockTopBottom(i, j, element) ||
                                 collisionBlockLeftRight(i, j, element)
@@ -97,7 +100,7 @@ define(['drawer', 'conf', 'block', 'constants'],
 
         explodeBlock = function(i, j) {
             boardData[i][j] = constants.BLOCK.NONE;
-
+            filledFields -= 1;
         };
 
         displayScoreBoard = function(score) {
@@ -112,10 +115,17 @@ define(['drawer', 'conf', 'block', 'constants'],
             drawer.ctx.fillText('Score: ' + score, 10, drawer.canvasHeight - 5);
         };
 
+        isEmpty = function() {
+            // if filledFields > 0 return false - board isn't empty
+            // otherwise return true - board is empty
+            return (filledFields > 0) ? false : true;
+        }
+
         return {
             draw: drawBoard,
             displayScore: displayScoreBoard,
             collision: collision,
+            isEmpty: isEmpty,
         };
     }
 );

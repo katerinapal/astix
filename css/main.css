@@ -1,0 +1,18 @@
+body {
+    background-image: url('../images/background.jpeg');
+    background-size: cover;
+    background-position: center center;
+}
+
+#gameBoard {
+    display: block;
+    width: 800px;
+    height: 500px;
+    margin: 0 auto;
+    border-top: transparent;
+    background-color: #FFF;
+    box-shadow: 0 3px 6px rgba(255, 255, 255, 0.3),
+                inset 0 -3px 3px rgba(255, 255, 255, 0.1);
+    border: solid #ccc 1px;
+    border-radius: 10px;
+}

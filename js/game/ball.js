@@ -1,22 +1,21 @@
 define(['drawer', 'conf'], function(drawer, conf) {
-    var drawBall, defaultStrokeColor = '#000', moveBall,
-        posX = 250, posY = 250, deltaX = 10, deltaY = 10,
-        ballRadius = 10, computeBallCollision,
-        getX, getY, getDeltaX, getDeltaY, setDeltaX, setDeltaY;
+    var drawBall, posX = 250, posY = 250, deltaX = 10, deltaY = 10,
+        ballRadius = 10, computeBallCollision, moveBall, getX, getY, getDeltaX,
+        getDeltaY, setDeltaX, setDeltaY, isDestroyed, destroyed = false;
 
     drawBall = function() {
         drawer.ctx.beginPath();
         drawer.ctx.arc(posX, posY, ballRadius, 0, Math.PI * 2, true);
-        drawer.ctx.strokeStyle = defaultStrokeColor;
+
+        drawer.ctx.strokeStyle = conf.BALL.STROKE_COLOR;
+        drawer.ctx.fillColor = conf.BALL.FILL_COLOR;
+
         drawer.ctx.stroke();
         drawer.ctx.fill();
     };
 
-    moveBall = function(elements, endGame) {
-        // collision for board
-        computeBallCollision(endGame);
-
-        // collision with elements
+    moveBall = function(elements) {
+        computeBallCollisionWithArea();
         collision(elements);
 
         posX += deltaX;
@@ -35,13 +34,13 @@ define(['drawer', 'conf'], function(drawer, conf) {
         });
     };
 
-    computeBallCollision = function(endGame) {
+    computeBallCollisionWithArea = function() {
         if (posY + deltaY - ballRadius < 0) {
             deltaY = -deltaY;
         }
 
         if (posY + deltaY + ballRadius > drawer.canvasHeight) {
-            endGame();
+            destroyed = true;
         }
 
         if (posX + deltaX + ballRadius > drawer.canvasWidth ||
@@ -75,6 +74,10 @@ define(['drawer', 'conf'], function(drawer, conf) {
         deltaY = newDeltaY;
     };
 
+    isDestroyed = function() {
+        return destroyed;
+    };
+
     return {
         draw: drawBall,
         move: moveBall,
@@ -84,5 +87,6 @@ define(['drawer', 'conf'], function(drawer, conf) {
         getDeltaY: getDeltaY,
         setDeltaX: setDeltaX,
         setDeltaY: setDeltaY,
+        isDestroyed: isDestroyed,
     };
 })

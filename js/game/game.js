@@ -41,13 +41,17 @@ require(['domReady!', 'drawer', 'board', 'paddle', 'ball',
             drawer.clearArea();
             board.draw();
             board.displayScore(score);
-            ball.move([paddle], endGame);
+            ball.move([paddle]);
             ball.draw();
             paddle.move(paddleMove);
             board.collision([ball], function() {
                 score += 2;
             });
             paddle.draw();
+
+            if (board.isEmpty() || ball.isDestroyed()) {
+                gameStatus = constants.GAME.STATUS.END;
+            }
 
             if (constants.GAME.STATUS.PLAYING === gameStatus) {
                 window.requestAnimationFrame(animate);
