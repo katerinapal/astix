@@ -1,16 +1,24 @@
-define(['domReady!'], function(doc) {
-    var cvs = doc.getElementById('gameBoard'),
-        ctx = cvs.getContext('2d'),
-        clearArea;
+let instance = null;
 
-    clearArea = function() {
-        ctx.clearRect(0, 0, cvs.width, cvs.height);
+class Drawer {
+    constructor() {
+        if (!instance) {
+            instance = this;
+        }
+
+        this.cvs = document.getElementById('gameBoard');
+        this.ctx = this.cvs.getContext('2d');
+        this.canvasWidth = this.cvs.width;
+        this.canvasHeight = this.cvs.height;
+
+        this.clearArea = this.clearArea.bind(this);
+
+        return instance;
+    } 
+
+    clearArea() {
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     }
+}
 
-    return {
-        ctx: ctx,
-        canvasWidth: cvs.width,
-        canvasHeight: cvs.height,
-        clearArea: clearArea,
-    };
-})
+export default Drawer;

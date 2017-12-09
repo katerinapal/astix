@@ -1,15 +1,7 @@
-requirejs.config({
-    baseUrl: 'js/libs',
-    paths: {
-        game: '../game',
-        drawer: '../game/drawer',
-        conf: '../game/conf',
-        ball: '../game/ball',
-        block: '../game/block',
-        board: '../game/board',
-        constants: '../game/constants',
-        paddle: '../game/paddle'
-    },
-});
+import Game from './game/game';
+import Drawer from './game/drawer';
 
-requirejs(['game/game']);
+const drawer = new Drawer(),
+      game = new Game(drawer);
+
+game.start();

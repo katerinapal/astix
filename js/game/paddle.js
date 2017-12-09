@@ -1,62 +1,62 @@
-define(['drawer', 'block', 'conf', 'constants'],
-    function(drawer, block, conf, constants) {
-        var drawPaddle, movePaddle,
-            defaultPosX = (drawer.canvasWidth / 2) - (conf.paddleWidth / 2),
-            defaultPosY = drawer.canvasHeight - conf.paddleHeight,
-            posX = defaultPosX,
-            posY = defaultPosY,
-            defaultPaddleSpeedX = 10,
-            deltaPaddleX = 0,
-            getX, getY,
-            getWidth, getHeight;
+import Block from './Block';
 
-        drawPaddle = function() {
-            block.setStrokeColor("#000");
-            block.draw(posX, posY, conf.paddleWidth, conf.paddleHeight);
-        };
+import config from './config';
+import constants from './constants';
 
-        movePaddle = function(direction) {
-            deltaPaddleX = 0;
+class Paddle {
+    constructor(drawer) {
+        this.drawer = drawer;
+        this.defaultPosX = (this.drawer.canvasWidth / 2) - (config.paddleWidth / 2);
+        this.defaultPosY = this.drawer.canvasHeight - config.paddleHeight;
+        this.posX = this.defaultPosX;
+        this.posY = this.defaultPosY;
+        this.defaultPaddleSpeedX = 10;
+        this.deltaPaddleX = 0;
+        this.block = new Block(this.drawer);
 
-            if (constants.DIRECTION.LEFT === direction) {
-                deltaPaddleX = -defaultPaddleSpeedX;
-            }
+        console.log(this.defaultPosX, this.defaultPosY);
+    }
 
-            if (constants.DIRECTION.RIGHT === direction) {
-                deltaPaddleX = defaultPaddleSpeedX;
-            }
+    draw() {
+        this.block.setStrokeColor("#000");
+        this.block.draw(this.posX, this.posY, config.paddleWidth, config.paddleHeight);
+    }
 
-            if (posX + deltaPaddleX < 0 ||
-                posX + conf.paddleWidth + deltaPaddleX > drawer.canvasWidth)
-            {
-                deltaPaddleX = 0;
-            }
+    move(direction) {
+        this.deltaPaddleX = 0;
 
-            posX += deltaPaddleX;
-        };
+        if (constants.DIRECTION.LEFT === direction) {
+            this.deltaPaddleX = -this.defaultPaddleSpeedX;
+        }
 
-        getX = function() {
-            return posX;
-        };
+        if (constants.DIRECTION.RIGHT === direction) {
+            this.deltaPaddleX = this.defaultPaddleSpeedX;
+        }
 
-        getY = function() {
-            return posY;
-        };
+        if (this.posX + this.deltaPaddleX < 0 ||
+            this.posX + config.paddleWidth + this.deltaPaddleX > this.drawer.canvasWidth)
+        {
+            this.deltaPaddleX = 0;
+        }
 
-        getWidth = function() {
-            return conf.paddleWidth;
-        };
+        this.posX += this.deltaPaddleX;
+    }
 
-        getHeight = function() {
-            return conf.paddleHeight;
-        };
+    getX() {
+        return this.posX;
+    }
 
-        return {
-            draw: drawPaddle,
-            move: movePaddle,
-            getX: getX,
-            getY: getY,
-            getWidth: getWidth,
-            getHeight: getHeight,
-        };
-    })
+    getY() {
+        return this.posY;
+    }
+
+    getWidth() {
+        return config.paddleWidth;
+    }
+
+    getHeight() {
+        return config.paddleHeight;
+    }
+}
+ 
+export default Paddle;

@@ -1,92 +1,90 @@
-define(['drawer', 'conf'], function(drawer, conf) {
-    var drawBall, posX = 250, posY = 250, deltaX = 10, deltaY = 10,
-        ballRadius = 10, computeBallCollision, moveBall, getX, getY, getDeltaX,
-        getDeltaY, setDeltaX, setDeltaY, isDestroyed, destroyed = false;
+import config from './config';
 
-    drawBall = function() {
-        drawer.ctx.beginPath();
-        drawer.ctx.arc(posX, posY, ballRadius, 0, Math.PI * 2, true);
+class Ball {
+    constructor(drawer) {
+        this.drawer = drawer;
+        this.posX = 250;
+        this.posY = 250;
+        this.deltaX = 10;
+        this.deltaY = 10;
+        this.ballRadius = 10;
+        this.destroyed = false;
+    }
 
-        drawer.ctx.strokeStyle = conf.BALL.STROKE_COLOR;
-        drawer.ctx.fillColor = conf.BALL.FILL_COLOR;
+    draw() {
+        this.drawer.ctx.beginPath();
+        this.drawer.ctx.arc(this.posX, this.posY, this.ballRadius, 0, Math.PI * 2, true);
 
-        drawer.ctx.stroke();
-        drawer.ctx.fill();
-    };
+        this.drawer.ctx.strokeStyle = config.BALL.STROKE_COLOR;
+        this.drawer.ctx.fillColor = config.BALL.FILL_COLOR;
 
-    moveBall = function(elements) {
-        computeBallCollisionWithArea();
-        collision(elements);
+        this.drawer.ctx.stroke();
+        this.drawer.ctx.fill();
+    }
 
-        posX += deltaX;
-        posY += deltaY;
-    };
+    move(elements) {
+        this.computeBallCollisionWithArea();
+        this.collision(elements);
 
-    collision = function(elements) {
-        elements.forEach(function(element, index) {
-            if (posY + deltaY + ballRadius >= element.getY()) {
-                if (posX + deltaX >= element.getX() &&
-                    posX + deltaX <= element.getX() + element.getWidth()
+        this.posX += this.deltaX;
+        this.posY += this.deltaY;
+    }
+
+    collision(elements) {
+        elements.forEach(element => {
+            if (this.posY + this.deltaY + this.ballRadius >= element.getY()) {
+                if (this.posX + this.deltaX >= element.getX() &&
+                    this.posX + this.deltaX <= element.getX() + element.getWidth()
                 ) {
-                    deltaY = -deltaY;
+                    this.deltaY = -this.deltaY;
                 }
             }
         });
-    };
+    }
 
-    computeBallCollisionWithArea = function() {
-        if (posY + deltaY - ballRadius < 0) {
-            deltaY = -deltaY;
+    computeBallCollisionWithArea() {
+        if (this.posY + this.deltaY - this.ballRadius < 0) {
+            this.deltaY = -this.deltaY;
         }
 
-        if (posY + deltaY + ballRadius > drawer.canvasHeight) {
-            destroyed = true;
+        if (this.posY + this.deltaY + this.ballRadius > this.drawer.canvasHeight) {
+            this.destroyed = true;
         }
 
-        if (posX + deltaX + ballRadius > drawer.canvasWidth ||
-            posX + deltaX - ballRadius < 0)
+        if (this.posX + this.deltaX + this.ballRadius > this.drawer.canvasWidth ||
+            this.posX + this.deltaX - this.ballRadius < 0)
         {
-            deltaX = -deltaX;
+            this.deltaX = -this.deltaX;
         }
-    };
+    }
 
-    getX = function() {
-        return posX;
-    };
+    getX() {
+        return this.posX;
+    }
 
-    getY = function() {
-        return posY;
-    };
+    getY() {
+        return this.posY;
+    }
 
-    getDeltaX = function() {
-        return deltaX;
-    };
+    getDeltaX() {
+        return this.deltaX;
+    }
 
-    getDeltaY = function() {
-        return deltaY;
-    };
+    getDeltaY() {
+        return this.deltaY;
+    }
 
-    setDeltaX = function(newDeltaX) {
-        deltaX = newDeltaX;
-    };
+    setDeltaX(newDeltaX) {
+        this.deltaX = newDeltaX;
+    }
 
-    setDeltaY = function(newDeltaY) {
-        deltaY = newDeltaY;
-    };
+    setDeltaY(newDeltaY) {
+        this.deltaY = newDeltaY;
+    }
 
-    isDestroyed = function() {
-        return destroyed;
-    };
+    isDestroyed() {
+        return this.destroyed;
+    }
+}
 
-    return {
-        draw: drawBall,
-        move: moveBall,
-        getX: getX,
-        getY: getY,
-        getDeltaX: getDeltaX,
-        getDeltaY: getDeltaY,
-        setDeltaX: setDeltaX,
-        setDeltaY: setDeltaY,
-        isDestroyed: isDestroyed,
-    };
-})
+export default Ball;

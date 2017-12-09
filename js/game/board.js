@@ -1,139 +1,140 @@
-define(['drawer', 'conf', 'block', 'constants'],
-    function(drawer, conf, block, constants) {
-        var rows = conf.blocksPerRow,
-            columns = Math.floor(conf.startBlocksQuantity / conf.blocksPerRow),
-            drawBoard, displayScoreBoard, collision, explodeBlock,
-            boardData = Array(conf.blocksPerRow),
-            collisionBlockLeftRight, collisionBlockTopBottom, isEmpty,
-            filledFields = rows * columns;
+import Block from './block';
 
-        for (var i = 0; i < rows; i++) {
-            boardData[i] = Array(columns);
+import config from './config';
+import constants from './constants';
 
-            for (var j = 0; j < columns; j++) {
-                boardData[i][j] = constants.BLOCK.VISIBLE;
+class Board {
+    constructor(drawer) {
+        this.drawer = drawer;
+        this.rows = config.blocksPerRow;
+        this.columns = Math.floor(config.startBlocksQuantity / config.blocksPerRow);
+        this.boardData = Array(config.blocksPerRow);
+        this.filledFields = this.rows * this.columns;
+
+        for (let i = 0; i < this.rows; i++) {
+            this.boardData[i] = Array(this.columns);
+
+            for (let j = 0; j < this.columns; j++) {
+                this.boardData[i][j] = constants.BLOCK.VISIBLE;
             }
         }
+    }
 
-        drawBoard = function(newFillColor, newStrokeColor) {
-            var i, j, posX, posY;
+    draw(newFillColor, newStrokeColor) {
+        let posX, posY, block;
 
-            if (typeof newFillColor !== "undefined") {
-                block.setFillColor(newFillColor);
-            }
-
-            if (typeof newStrokeColor !== "undefined") {
-                block.setStrokeColor(newStrokeColor);
-            }
-
-            for (i = 0; i < rows; i++) {
-                for (j = 0; j < columns; j++) {
-                    if (boardData[i][j] === constants.BLOCK.VISIBLE) {
-                        posX = i * conf.blockWidth;
-                        posY = j * conf.blockHeight;
-
-                        block.draw(posX, posY, conf.blockWidth, conf.blockHeight);
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                if (this.boardData[i][j] === constants.BLOCK.VISIBLE) {
+                    block = new Block(this.drawer);
+                    
+                    if (typeof newFillColor !== "undefined") {
+                        block.setFillColor(newFillColor);
                     }
+            
+                    if (typeof newStrokeColor !== "undefined") {
+                        block.setStrokeColor(newStrokeColor);
+                    }
+
+                    posX = i * config.blockWidth;
+                    posY = j * config.blockHeight;
+                    
+                    block.draw(posX, posY, config.blockWidth, config.blockHeight);
                 }
             }
-        };
+        }
+    }
 
-        collision = function(elements, collisionCallback) {
-            var i, j, blockPosX, blockPosY;
+    collision(elements, collisionCallback) {
+        let blockPosX, blockPosY;
 
-            elements.forEach(function(element, index) {
-                for (i=0; i < rows; i++) {
-                    for (j = 0; j < columns; j++) {
-                        if (boardData[i][j] === constants.BLOCK.VISIBLE) {
-                            if (collisionBlockTopBottom(i, j, element) ||
-                                collisionBlockLeftRight(i, j, element)
-                            ) {
-                                collisionCallback();
-                            }
+        elements.forEach(element => {
+            for (let i = 0; i < this.rows; i++) {
+                for (let j = 0; j < this.columns; j++) {
+                    if (this.boardData[i][j] === constants.BLOCK.VISIBLE) {
+                        if (this.collisionBlockTopBottom(i, j, element) ||
+                            this.collisionBlockLeftRight(i, j, element)
+                        ) {
+                            collisionCallback();
                         }
                     }
                 }
-            });
-        };
-
-        collisionBlockLeftRight = function(i, j, element) {
-            blockPosX = i * conf.blockWidth;
-            blockPosY = j * conf.blockHeight;
-
-            if ((element.getX() + element.getDeltaX() >= blockPosX &&
-                 element.getX() <= blockPosX
-                )
-                ||
-                (element.getX() + element.getDeltaX() <= blockPosX + conf.blockWidth &&
-                 element.getX() >= blockPosX + conf.blockWidth
-                )
-            ) {
-                if (element.getY() + element.getDeltaY() <= blockPosY + conf.blockHeight &&
-                     element.getY() + element.getDeltaY() >= blockPosY
-                 ) {
-                     explodeBlock(i, j);
-                     element.setDeltaX(-element.getDeltaX());
-
-                     return true;
-                 }
             }
+        });
+    }
 
-            return false;
-        };
+    collisionBlockLeftRight(i, j, element) {
+        let blockPosX = i * config.blockWidth,
+            blockPosY = j * config.blockHeight;
 
-        collisionBlockTopBottom = function(i, j, element) {
-            blockPosX = i * conf.blockWidth;
-            blockPosY = j * conf.blockHeight;
+        if ((element.getX() + element.getDeltaX() >= blockPosX &&
+             element.getX() <= blockPosX
+            )
+            ||
+            (element.getX() + element.getDeltaX() <= blockPosX + config.blockWidth &&
+             element.getX() >= blockPosX + config.blockWidth
+            )
+        ) {
+            if (element.getY() + element.getDeltaY() <= blockPosY + config.blockHeight &&
+                 element.getY() + element.getDeltaY() >= blockPosY
+             ) {
+                 this.explodeBlock(i, j);
+                 element.setDeltaX(-element.getDeltaX());
 
-            if ((element.getY() + element.getDeltaY() <= blockPosY + conf.blockHeight &&
-                 element.getY() >= blockPosY + conf.blockHeight
-                )
-                ||
-                (element.getY() + element.getDeltaY() >= blockPosY &&
-                 element.getY() <= blockPosY
-                )
-            ) {
-                if (element.getX() + element.getDeltaX() >= blockPosX &&
-                    element.getX() + element.getDeltaX() <= blockPosX + conf.blockWidth
-                ) {
-                    explodeBlock(i, j);
-                    element.setDeltaY(-element.getDeltaY());
-
-                    return true;
-                }
-            }
-
-            return false;
-        };
-
-        explodeBlock = function(i, j) {
-            boardData[i][j] = constants.BLOCK.NONE;
-            filledFields -= 1;
-        };
-
-        displayScoreBoard = function(score) {
-            if (typeof score === "undefined") {
-                score = 0;
-            }
-
-            drawer.ctx.fillStyle = 'rgb(0, 0, 0)';
-            drawer.ctx.font = "20px Arial";
-
-            drawer.ctx.clearRect(0, drawer.canvasHeight - 30, drawer.canvasWidth, 30)
-            drawer.ctx.fillText('Score: ' + score, 10, drawer.canvasHeight - 5);
-        };
-
-        isEmpty = function() {
-            // if filledFields > 0 return false - board isn't empty
-            // otherwise return true - board is empty
-            return (filledFields > 0) ? false : true;
+                 return true;
+             }
         }
 
-        return {
-            draw: drawBoard,
-            displayScore: displayScoreBoard,
-            collision: collision,
-            isEmpty: isEmpty,
-        };
+        return false;
     }
-);
+
+    collisionBlockTopBottom(i, j, element) {
+        let blockPosX = i * config.blockWidth,
+            blockPosY = j * config.blockHeight;
+
+        if ((element.getY() + element.getDeltaY() <= blockPosY + config.blockHeight &&
+             element.getY() >= blockPosY + config.blockHeight
+            )
+            ||
+            (element.getY() + element.getDeltaY() >= blockPosY &&
+             element.getY() <= blockPosY
+            )
+        ) {
+            if (element.getX() + element.getDeltaX() >= blockPosX &&
+                element.getX() + element.getDeltaX() <= blockPosX + config.blockWidth
+            ) {
+                this.explodeBlock(i, j);
+                element.setDeltaY(-element.getDeltaY());
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    explodeBlock(i, j) {
+        this.boardData[i][j] = constants.BLOCK.NONE;
+        this.filledFields -= 1;
+    }
+
+    displayScore(score) {
+        if (typeof score === "undefined") {
+            score = 0;
+        }
+
+        this.drawer.ctx.fillStyle = 'rgb(0, 0, 0)';
+        this.drawer.ctx.font = "20px Arial";
+
+        this.drawer.ctx.clearRect(0, this.drawer.canvasHeight - 30, this.drawer.canvasWidth, 30)
+        this.drawer.ctx.fillText('Score: ' + score, 10, this.drawer.canvasHeight - 5);
+    };
+
+    isEmpty() {
+        // if filledFields > 0 return false - board isn't empty
+        // otherwise return true - board is empty
+        return (this.filledFields > 0) ? false : true;
+    }
+}
+
+export default Board;

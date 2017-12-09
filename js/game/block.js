@@ -1,32 +1,32 @@
-define(['drawer', 'conf'], function(drawer, conf) {
-    var drawBlock, setStrokeColor, setFillColor,
-        fillColor = conf.BLOCK.FILL_COLOR,
-        strokeColor = conf.BLOCK.STROKE_COLOR;
+import config from './config';
 
-    drawBlock = function(x, y, width, height) {
-        drawer.ctx.fillStyle = fillColor;
-        drawer.ctx.strokeStyle = strokeColor;
-        drawer.ctx.lineWidth = 2;
+class Block {
+    constructor(drawer) {
+        this.drawer = drawer;
+        this.fillColor = config.BLOCK.FILL_COLOR;
+        this.strokeColor = config.BLOCK.STROKE_COLOR;
+    }
 
-        drawer.ctx.fillRect(x, y, width, height);
-        drawer.ctx.strokeRect(x, y, width, height);
-    };
+    draw(x, y, width, height) {
+        this.drawer.ctx.fillStyle = this.fillColor;
+        this.drawer.ctx.strokeStyle = this.strokeColor;
+        this.drawer.ctx.lineWidth = 2;
 
-    setStrokeColor = function(newStrokeColor) {
+        this.drawer.ctx.fillRect(x, y, width, height);
+        this.drawer.ctx.strokeRect(x, y, width, height);
+    }
+
+    setStrokeColor(newStrokeColor) {
         if (typeof newStrokeColor !== "undefined") {
-            strokeColor = newStrokeColor;
+            this.strokeColor = newStrokeColor;
         }
-    };
+    }
 
-    setFillColor = function(newFillColor) {
+    setFillColor(newFillColor) {
         if (typeof newFillColor !== "undefined") {
-            fillColor = newFillColor;
+            this.fillColor = newFillColor;
         }
-    };
+    }
+}
 
-    return {
-        draw: drawBlock,
-        setStrokeColor: setStrokeColor,
-        setFillColor: setFillColor,
-    };
-})
+export default Block;
