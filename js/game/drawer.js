@@ -1,5 +1,5 @@
 define(['domReady'], function(doc) {
-    var cvs = doc.getElementById('gameBoard'),
+    var cvs = document.getElementById('gameBoard'),
         ctx = cvs.getContext('2d'),
         clearArea;
 

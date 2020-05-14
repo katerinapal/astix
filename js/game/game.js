@@ -9,7 +9,7 @@ require(['domReady', 'drawer', 'board', 'paddle', 'ball',
             gameStatus = constants.GAME.STATUS.START;
             window.requestAnimationFrame(animate);
 
-            doc.addEventListener('keydown', function(event) {
+            document.addEventListener('keydown', function(event) {
                 if (event.keyCode === constants.KEYBOARD.LEFT) {
                     paddleMove = constants.DIRECTION.LEFT;
                 }
@@ -19,7 +19,7 @@ require(['domReady', 'drawer', 'board', 'paddle', 'ball',
                 }
             });
 
-            doc.addEventListener('keyup', function(event) {
+            document.addEventListener('keyup', function(event) {
                 console.log(event.keyCode);
                 if (event.keyCode == constants.KEYBOARD.LEFT) {
                     paddleMove = constants.NONE;
