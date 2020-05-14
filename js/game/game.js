@@ -1,4 +1,4 @@
-require(['domReady!', 'drawer', 'board', 'paddle', 'ball',
+require(['domReady', 'drawer', 'board', 'paddle', 'ball',
     'constants', 'conf'],
     function(doc, drawer, board, paddle, ball, constants, conf) {
         var startGame, animate, gameLoop, endGame, paddleMove,

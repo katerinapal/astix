@@ -1,4 +1,4 @@
-define(['domReady!'], function(doc) {
+define(['domReady'], function(doc) {
     return {
         "NONE": 0,
         "DIRECTION": {

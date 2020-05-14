@@ -1,4 +1,4 @@
-define(['domReady!'], function(doc) {
+define(['domReady'], function(doc) {
     var cvs = doc.getElementById('gameBoard'),
         ctx = cvs.getContext('2d'),
         clearArea;
