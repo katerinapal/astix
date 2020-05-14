@@ -1,3 +1,4 @@
+import ".\\game\\game.js";
 requirejs.config({
     baseUrl: 'js/libs',
     paths: {
@@ -11,5 +12,3 @@ requirejs.config({
         paddle: '../game/paddle'
     },
 });
-
-requirejs(['game/game']);
