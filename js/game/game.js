@@ -1,65 +1,100 @@
-require(['domReady', 'drawer', 'board', 'paddle', 'ball',
-    'constants', 'conf'],
-    function(doc, drawer, board, paddle, ball, constants, conf) {
-        var startGame, animate, gameLoop, endGame, paddleMove,
-            score = 0, gameStatus = constants.GAME.STATUS.STOP;
+import {
+    blocksPerRow as confjs_blocksPerRow,
+    divinaProportio as confjs_divinaProportio,
+    blockWidth as confjs_blockWidth,
+    blockHeight as confjs_blockHeight,
+    startBlocksQuantity as confjs_startBlocksQuantity,
+    paddleWidth as confjs_paddleWidth,
+    paddleHeight as confjs_paddleHeight,
+    BALL as confjs_BALL,
+    BLOCK as confjs_BLOCK,
+    BOARD as confjs_BOARD,
+    PADDLE as confjs_PADDLE,
+} from ".\\conf.js";
 
-        startGame = function() {
-            paddleMove = constants.NONE;
-            gameStatus = constants.GAME.STATUS.START;
-            window.requestAnimationFrame(animate);
+import {
+    NONE as constantsjs_NONE,
+    DIRECTION as constantsjs_DIRECTION,
+    KEYBOARD as constantsjs_KEYBOARD,
+    BLOCK as constantsjs_BLOCK,
+    GAME as constantsjs_GAME,
+} from ".\\constants.js";
 
-            document.addEventListener('keydown', function(event) {
-                if (event.keyCode === constants.KEYBOARD.LEFT) {
-                    paddleMove = constants.DIRECTION.LEFT;
-                }
+import { ball_obj as ball } from ".\\ball.js";
+import { paddle_obj as paddle } from ".\\paddle.js";
 
-                if (event.keyCode === constants.KEYBOARD.RIGHT) {
-                    paddleMove = constants.DIRECTION.RIGHT;
-                }
-            });
+import {
+    draw as boardjs_draw,
+    displayScore as boardjs_displayScore,
+    collision as boardjs_collision,
+    isEmpty as boardjs_isEmpty,
+} from ".\\board.js";
 
-            document.addEventListener('keyup', function(event) {
-                console.log(event.keyCode);
-                if (event.keyCode == constants.KEYBOARD.LEFT) {
-                    paddleMove = constants.NONE;
-                }
+import {
+    ctx as drawerjs_ctx,
+    canvasWidth as drawerjs_canvasWidth,
+    canvasHeight as drawerjs_canvasHeight,
+    clearArea as drawerjs_clearArea,
+} from ".\\drawer.js";
 
-                if (event.keyCode == constants.KEYBOARD.RIGHT) {
-                    paddleMove = constants.NONE;
-                }
-            });
-        };
+var startGame, animate, gameLoop, endGame, paddleMove,
+    score = 0, gameStatus = constantsjs_GAME.STATUS.STOP;
 
-        endGame = function() {
-            gameStatus = constants.GAME.STATUS.STOP;
-            drawer.ctx.fillText('The End!', drawer.canvasWidth / 2, drawer.canvasHeight / 2);
-        };
+startGame = function() {
+    paddleMove = constantsjs_NONE;
+    gameStatus = constantsjs_GAME.STATUS.START;
+    window.requestAnimationFrame(animate);
 
-        animate = function() {
-            gameStatus = constants.GAME.STATUS.PLAYING;
-            drawer.clearArea();
-            board.draw(
-                conf.BOARD.BLOCK.FILL_COLOR,
-                conf.BOARD.BLOCK.STROKE_COLOR
-            );
-            board.displayScore(score);
-            ball.move([paddle]);
-            ball.draw();
-            paddle.move(paddleMove);
-            board.collision([ball], function() {
-                score += 2;
-            });
-            paddle.draw(conf.PADDLE.FILL_COLOR, conf.PADDLE.STROKE_COLOR);
+    document.addEventListener('keydown', function(event) {
+        if (event.keyCode === constantsjs_KEYBOARD.LEFT) {
+            paddleMove = constantsjs_DIRECTION.LEFT;
+        }
 
-            if (board.isEmpty() || ball.isDestroyed()) {
-                gameStatus = constants.GAME.STATUS.END;
-            }
-
-            if (constants.GAME.STATUS.PLAYING === gameStatus) {
-                window.requestAnimationFrame(animate);
-            }
-        };
-
-        startGame();
+        if (event.keyCode === constantsjs_KEYBOARD.RIGHT) {
+            paddleMove = constantsjs_DIRECTION.RIGHT;
+        }
     });
+
+    document.addEventListener('keyup', function(event) {
+        console.log(event.keyCode);
+        if (event.keyCode == constantsjs_KEYBOARD.LEFT) {
+            paddleMove = constantsjs_NONE;
+        }
+
+        if (event.keyCode == constantsjs_KEYBOARD.RIGHT) {
+            paddleMove = constantsjs_NONE;
+        }
+    });
+};
+
+endGame = function() {
+    gameStatus = constantsjs_GAME.STATUS.STOP;
+    drawerjs_ctx.fillText('The End!', drawerjs_canvasWidth / 2, drawerjs_canvasHeight / 2);
+};
+
+animate = function() {
+    gameStatus = constantsjs_GAME.STATUS.PLAYING;
+    drawerjs_clearArea();
+    boardjs_draw(
+        confjs_BOARD.BLOCK.FILL_COLOR,
+        confjs_BOARD.BLOCK.STROKE_COLOR
+    );
+    boardjs_displayScore(score);
+    ball.move([paddle]);
+    ball.draw();
+    paddle.move(paddleMove);
+    boardjs_collision([ball], function() {
+        score += 2;
+    });
+    paddle.draw(confjs_PADDLE.FILL_COLOR, confjs_PADDLE.STROKE_COLOR);
+
+    if (boardjs_isEmpty() || ball.isDestroyed()) {
+        gameStatus = constantsjs_GAME.STATUS.END;
+    }
+
+    if (constantsjs_GAME.STATUS.PLAYING === gameStatus) {
+        window.requestAnimationFrame(animate);
+    }
+};
+
+startGame();
