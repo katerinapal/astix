@@ -1,32 +1,37 @@
-define(['drawer', 'conf'], function(drawer, conf) {
-    var drawBlock, setStrokeColor, setFillColor,
-        fillColor = conf.BLOCK.FILL_COLOR,
-        strokeColor = conf.BLOCK.STROKE_COLOR;
+import { BLOCK as conf_BLOCK } from ".\\conf.js";
+import { ctx as drawer_ctx } from ".\\drawer.js";
+var drawBlock, setStrokeColor, setFillColor,
+    fillColor = conf_BLOCK.FILL_COLOR,
+    strokeColor = conf_BLOCK.STROKE_COLOR;
 
-    drawBlock = function(x, y, width, height) {
-        drawer.ctx.fillStyle = fillColor;
-        drawer.ctx.strokeStyle = strokeColor;
-        drawer.ctx.lineWidth = 2;
+drawBlock = function(x, y, width, height) {
+    drawer_ctx.fillStyle = fillColor;
+    drawer_ctx.strokeStyle = strokeColor;
+    drawer_ctx.lineWidth = 2;
 
-        drawer.ctx.fillRect(x, y, width, height);
-        drawer.ctx.strokeRect(x, y, width, height);
-    };
+    drawer_ctx.fillRect(x, y, width, height);
+    drawer_ctx.strokeRect(x, y, width, height);
+};
 
-    setStrokeColor = function(newStrokeColor) {
-        if (typeof newStrokeColor !== "undefined") {
-            strokeColor = newStrokeColor;
-        }
-    };
+setStrokeColor = function(newStrokeColor) {
+    if (typeof newStrokeColor !== "undefined") {
+        strokeColor = newStrokeColor;
+    }
+};
 
-    setFillColor = function(newFillColor) {
-        if (typeof newFillColor !== "undefined") {
-            fillColor = newFillColor;
-        }
-    };
+setFillColor = function(newFillColor) {
+    if (typeof newFillColor !== "undefined") {
+        fillColor = newFillColor;
+    }
+};
 
-    return {
-        draw: drawBlock,
-        setStrokeColor: setStrokeColor,
-        setFillColor: setFillColor,
-    };
-})
+var mod_block = {
+    draw: drawBlock,
+    setStrokeColor: setStrokeColor,
+    setFillColor: setFillColor,
+};
+
+var draw = drawBlock;
+var block_setStrokeColor = setStrokeColor;
+var block_setFillColor = setFillColor;
+export { draw, block_setStrokeColor as setStrokeColor, block_setFillColor as setFillColor };

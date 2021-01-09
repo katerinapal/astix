@@ -1,62 +1,65 @@
-define(['drawer', 'block', 'conf', 'constants'],
-    function(drawer, block, conf, constants) {
-        var drawPaddle, movePaddle,
-            defaultPosX = (drawer.canvasWidth / 2) - (conf.paddleWidth / 2),
-            defaultPosY = drawer.canvasHeight - conf.paddleHeight,
-            posX = defaultPosX,
-            posY = defaultPosY,
-            defaultPaddleSpeedX = 10,
-            deltaPaddleX = 0,
-            getX, getY,
-            getWidth, getHeight;
+import { DIRECTION as constants_DIRECTION } from ".\\constants.js";
+import { paddleWidth as conf_paddleWidth, paddleHeight as conf_paddleHeight } from ".\\conf.js";
+import { draw as block_draw, setStrokeColor as block_setStrokeColor } from ".\\block.js";
+import { canvasWidth as drawer_canvasWidth, canvasHeight as drawer_canvasHeight } from ".\\drawer.js";
+var drawPaddle, movePaddle,
+    defaultPosX = (drawer_canvasWidth / 2) - (conf_paddleWidth / 2),
+    defaultPosY = drawer_canvasHeight - conf_paddleHeight,
+    posX = defaultPosX,
+    posY = defaultPosY,
+    defaultPaddleSpeedX = 10,
+    deltaPaddleX = 0,
+    getX, getY,
+    getWidth, getHeight;
 
-        drawPaddle = function() {
-            block.setStrokeColor("#000");
-            block.draw(posX, posY, conf.paddleWidth, conf.paddleHeight);
-        };
+drawPaddle = function() {
+    block_setStrokeColor("#000");
+    block_draw(posX, posY, conf_paddleWidth, conf_paddleHeight);
+};
 
-        movePaddle = function(direction) {
-            deltaPaddleX = 0;
+movePaddle = function(direction) {
+    deltaPaddleX = 0;
 
-            if (constants.DIRECTION.LEFT === direction) {
-                deltaPaddleX = -defaultPaddleSpeedX;
-            }
+    if (constants_DIRECTION.LEFT === direction) {
+        deltaPaddleX = -defaultPaddleSpeedX;
+    }
 
-            if (constants.DIRECTION.RIGHT === direction) {
-                deltaPaddleX = defaultPaddleSpeedX;
-            }
+    if (constants_DIRECTION.RIGHT === direction) {
+        deltaPaddleX = defaultPaddleSpeedX;
+    }
 
-            if (posX + deltaPaddleX < 0 ||
-                posX + conf.paddleWidth + deltaPaddleX > drawer.canvasWidth)
-            {
-                deltaPaddleX = 0;
-            }
+    if (posX + deltaPaddleX < 0 ||
+        posX + conf_paddleWidth + deltaPaddleX > drawer_canvasWidth)
+    {
+        deltaPaddleX = 0;
+    }
 
-            posX += deltaPaddleX;
-        };
+    posX += deltaPaddleX;
+};
 
-        getX = function() {
-            return posX;
-        };
+getX = function() {
+    return posX;
+};
 
-        getY = function() {
-            return posY;
-        };
+getY = function() {
+    return posY;
+};
 
-        getWidth = function() {
-            return conf.paddleWidth;
-        };
+getWidth = function() {
+    return conf_paddleWidth;
+};
 
-        getHeight = function() {
-            return conf.paddleHeight;
-        };
+getHeight = function() {
+    return conf_paddleHeight;
+};
 
-        return {
-            draw: drawPaddle,
-            move: movePaddle,
-            getX: getX,
-            getY: getY,
-            getWidth: getWidth,
-            getHeight: getHeight,
-        };
-    })
+var mod_paddle = {
+    draw: drawPaddle,
+    move: movePaddle,
+    getX: getX,
+    getY: getY,
+    getWidth: getWidth,
+    getHeight: getHeight,
+};
+
+export { mod_paddle };

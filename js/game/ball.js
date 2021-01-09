@@ -1,92 +1,103 @@
-define(['drawer', 'conf'], function(drawer, conf) {
-    var drawBall, posX = 250, posY = 250, deltaX = 10, deltaY = 10,
-        ballRadius = 10, computeBallCollision, moveBall, getX, getY, getDeltaX,
-        getDeltaY, setDeltaX, setDeltaY, isDestroyed, destroyed = false;
+import { BALL as conf_BALL } from ".\\conf.js";
 
-    drawBall = function() {
-        drawer.ctx.beginPath();
-        drawer.ctx.arc(posX, posY, ballRadius, 0, Math.PI * 2, true);
+import {
+    ctx as drawer_ctx,
+    canvasWidth as drawer_canvasWidth,
+    canvasHeight as drawer_canvasHeight,
+} from ".\\drawer.js";
 
-        drawer.ctx.strokeStyle = conf.BALL.STROKE_COLOR;
-        drawer.ctx.fillColor = conf.BALL.FILL_COLOR;
+var collision;
+var computeBallCollisionWithArea;
+var drawBall, posX = 250, posY = 250, deltaX = 10, deltaY = 10,
+    ballRadius = 10, computeBallCollision, moveBall, getX, getY, getDeltaX,
+    getDeltaY, setDeltaX, setDeltaY, isDestroyed, destroyed = false;
 
-        drawer.ctx.stroke();
-        drawer.ctx.fill();
-    };
+drawBall = function() {
+    drawer_ctx.beginPath();
+    drawer_ctx.arc(posX, posY, ballRadius, 0, Math.PI * 2, true);
 
-    moveBall = function(elements) {
-        computeBallCollisionWithArea();
-        collision(elements);
+    drawer_ctx.strokeStyle = conf_BALL.STROKE_COLOR;
+    drawer_ctx.fillColor = conf_BALL.FILL_COLOR;
 
-        posX += deltaX;
-        posY += deltaY;
-    };
+    drawer_ctx.stroke();
+    drawer_ctx.fill();
+};
 
-    collision = function(elements) {
-        elements.forEach(function(element, index) {
-            if (posY + deltaY + ballRadius >= element.getY()) {
-                if (posX + deltaX >= element.getX() &&
-                    posX + deltaX <= element.getX() + element.getWidth()
-                ) {
-                    deltaY = -deltaY;
-                }
+moveBall = function(elements) {
+    computeBallCollisionWithArea();
+    collision(elements);
+
+    posX += deltaX;
+    posY += deltaY;
+};
+
+collision = function(elements) {
+    elements.forEach(function(element, index) {
+        if (posY + deltaY + ballRadius >= element.getY()) {
+            if (posX + deltaX >= element.getX() &&
+                posX + deltaX <= element.getX() + element.getWidth()
+            ) {
+                deltaY = -deltaY;
             }
-        });
-    };
-
-    computeBallCollisionWithArea = function() {
-        if (posY + deltaY - ballRadius < 0) {
-            deltaY = -deltaY;
         }
+    });
+};
 
-        if (posY + deltaY + ballRadius > drawer.canvasHeight) {
-            destroyed = true;
-        }
+computeBallCollisionWithArea = function() {
+    if (posY + deltaY - ballRadius < 0) {
+        deltaY = -deltaY;
+    }
 
-        if (posX + deltaX + ballRadius > drawer.canvasWidth ||
-            posX + deltaX - ballRadius < 0)
-        {
-            deltaX = -deltaX;
-        }
-    };
+    if (posY + deltaY + ballRadius > drawer_canvasHeight) {
+        destroyed = true;
+    }
 
-    getX = function() {
-        return posX;
-    };
+    if (posX + deltaX + ballRadius > drawer_canvasWidth ||
+        posX + deltaX - ballRadius < 0)
+    {
+        deltaX = -deltaX;
+    }
+};
 
-    getY = function() {
-        return posY;
-    };
+getX = function() {
+    return posX;
+};
 
-    getDeltaX = function() {
-        return deltaX;
-    };
+getY = function() {
+    return posY;
+};
 
-    getDeltaY = function() {
-        return deltaY;
-    };
+getDeltaX = function() {
+    return deltaX;
+};
 
-    setDeltaX = function(newDeltaX) {
-        deltaX = newDeltaX;
-    };
+getDeltaY = function() {
+    return deltaY;
+};
 
-    setDeltaY = function(newDeltaY) {
-        deltaY = newDeltaY;
-    };
+setDeltaX = function(newDeltaX) {
+    deltaX = newDeltaX;
+};
 
-    isDestroyed = function() {
-        return destroyed;
-    };
+setDeltaY = function(newDeltaY) {
+    deltaY = newDeltaY;
+};
 
-    return {
-        draw: drawBall,
-        move: moveBall,
-        getX: getX,
-        getY: getY,
-        getDeltaX: getDeltaX,
-        getDeltaY: getDeltaY,
-        setDeltaX: setDeltaX,
-        setDeltaY: setDeltaY,
-        isDestroyed: isDestroyed,
-    };
-})
+isDestroyed = function() {
+    return destroyed;
+};
+
+var mod_ball = {
+    draw: drawBall,
+    move: moveBall,
+    getX: getX,
+    getY: getY,
+    getDeltaX: getDeltaX,
+    getDeltaY: getDeltaY,
+    setDeltaX: setDeltaX,
+    setDeltaY: setDeltaY,
+    isDestroyed: isDestroyed,
+};
+
+export { collision };
+export { mod_ball };
